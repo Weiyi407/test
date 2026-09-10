@@ -1,0 +1,510 @@
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<title>产品机型资源甘特图</title>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    margin: 0; padding: 20px; background: #f5f6f8; color: #333; }
+  h1 { margin: 0 0 16px; font-size: 22px; font-weight: bold; text-align: center; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .chart-box {
+    background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 20px; margin-bottom: 20px;
+  }
+  /* 关键:容器固定高度,宽度自适应,内容超出时出现原生横向滚动条 */
+  #chartWrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 500px;
+    position: relative;
+  }
+  #chart { height: 440px; }
+  .panel { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 20px; margin-bottom: 16px; }
+  .panel h2 { margin: 0 0 12px; font-size: 15px; color: #555; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  button { padding: 6px 14px; border: 1px solid #dcdfe6; border-radius: 4px;
+    background: #fff; cursor: pointer; font-size: 13px; }
+  button:hover { border-color: #409eff; color: #409eff; }
+  button.primary { background: #409eff; color: #fff; border-color: #409eff; }
+  button.primary:hover { background: #66b1ff; border-color: #66b1ff; color: #fff; }
+  button.success { background: #67c23a; color: #fff; border-color: #67c23a; }
+  button.success:hover { background: #85ce61; border-color: #85ce61; color: #fff; }
+  button.danger { border-color: #f56c6c; color: #f56c6c; }
+  button.danger:hover { background: #fef0f0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border: 1px solid #e4e7ed; padding: 6px 10px; text-align: center; }
+  th { background: #fafafa; font-weight: 600; }
+  td input { width: 100%; border: none; background: transparent; text-align: center;
+    font-size: 13px; padding: 2px 0; }
+  td input:focus { outline: 1px solid #409eff; background: #ecf5ff; }
+  .hint { color: #909399; font-size: 12px; margin-top: 6px; }
+  .del-btn { color: #f56c6c; cursor: pointer; background: none; border: none; font-size: 16px; }
+  #err { color: #f56c6c; font-size: 12px; padding: 8px; display: none; background: #fff1f0; border-radius: 4px; margin-top: 8px; }
+  .share-info { background: #fdf6ec; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: #e6a23c; }
+  /* 自定义原生滚动条样式(和浏览器侧边条一致) */
+  #chartWrap::-webkit-scrollbar { height: 12px; }
+  #chartWrap::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 6px; }
+  #chartWrap::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 6px; }
+  #chartWrap::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>产品机型资源甘特图</h1>
+
+  <div class="share-info">
+    <b>协作：</b>改完数据 → 点「📦 导出 HTML」→ 上传到共享位置(GitHub Pages / 公司内网 HTTPS / 钉钉云文档) → 其他人刷新即看到最新版本。
+  </div>
+
+  <div class="chart-box">
+    <div id="chartWrap">
+      <div id="chart" _echarts_instance_="ec_1789032494156" style="width: 2116px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); position: relative;"><div style="position: relative; width: 2116px; height: 440px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;"><canvas data-zr-dom-id="zr_0" width="2412" height="501" style="position: absolute; left: 0px; top: 0px; width: 2116px; height: 440px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas></div><div class="" style="position: absolute; display: block; border-style: solid; white-space: nowrap; z-index: 9999999; box-shadow: rgba(0, 0, 0, 0.2) 1px 2px 10px; transition: opacity 0.2s cubic-bezier(0.23, 1, 0.32, 1), visibility 0.2s cubic-bezier(0.23, 1, 0.32, 1), transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); background-color: rgb(255, 255, 255); border-width: 1px; border-radius: 4px; color: rgb(102, 102, 102); font: 14px / 21px &quot;Microsoft YaHei&quot;; padding: 10px; top: 0px; left: 0px; transform: translate3d(623px, 13px, 0px); border-color: rgb(255, 255, 255); pointer-events: none; visibility: hidden; opacity: 0;"><b>3450kW-V2-跟网</b><br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#F7DE8E;"></span> Ⅰ-测试问题闭环: 2026-10-1 ~ 2026-10-15 (15天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#FBEAAC;"></span> Ⅰ-归档完成: 2026-10-16 ~ 2026-10-30 (15天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#FDF3C8;"></span> Ⅰ-发布/提单: 2026-10-30 ~ 2026-10-30 (1天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#C66B5F;"></span> Ⅱ-测试完成: 2026-10-31 ~ 2026-12-1 (32天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#DD867A;"></span> Ⅱ-测试问题闭环: 2026-12-1 ~ 2026-12-16 (16天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#EEA498;"></span> Ⅱ-归档完成: 2026-12-17 ~ 2026-12-30 (14天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#F7C5BB;"></span> Ⅱ-发布/提单: 2026-12-30 ~ 2026-12-30 (1天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#7FA6BA;"></span> 批量-测试问题闭环: 2026-9-15 ~ 2026-9-20 (6天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#9FC2D3;"></span> 批量-归档完成: 2026-9-20 ~ 2026-9-30 (11天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#BFDDED;"></span> 批量-发布/提单: 2026-9-30 ~ 2026-9-30 (1天)<br><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#F0CF76;"></span> Ⅰ-测试完成: 2026-9-30 ~ 2026-9-30 (1天)<br></div></div>
+    </div>
+    <div id="legendBox" style="display:flex;justify-content:center;gap:16px;padding:8px 0 0;font-size:13px"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#F7DE8E;border-radius:2px;display:inline-block"></span><span>Ⅰ-测试问题闭环</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#FBEAAC;border-radius:2px;display:inline-block"></span><span>Ⅰ-归档完成</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#FDF3C8;border-radius:2px;display:inline-block"></span><span>Ⅰ-发布/提单</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#C66B5F;border-radius:2px;display:inline-block"></span><span>Ⅱ-测试完成</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#DD867A;border-radius:2px;display:inline-block"></span><span>Ⅱ-测试问题闭环</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#EEA498;border-radius:2px;display:inline-block"></span><span>Ⅱ-归档完成</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#F7C5BB;border-radius:2px;display:inline-block"></span><span>Ⅱ-发布/提单</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#7FA6BA;border-radius:2px;display:inline-block"></span><span>批量-测试问题闭环</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#9FC2D3;border-radius:2px;display:inline-block"></span><span>批量-归档完成</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#BFDDED;border-radius:2px;display:inline-block"></span><span>批量-发布/提单</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#F0CF76;border-radius:2px;display:inline-block"></span><span>Ⅰ-测试完成</span></span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#E5BE5E;border-radius:2px;display:inline-block"></span><span>Ⅰ-首台装配完成</span></span></div>
+    <div id="err" style="display: none;"></div>
+  </div>
+
+  <div class="panel">
+    <h2>📦 协作 - 导出/导入</h2>
+    <div class="toolbar">
+      <button class="success" onclick="exportHTML()">📦 导出 HTML</button>
+      <button onclick="document.getElementById('htmlInput').click()">📥 导入 HTML</button>
+      <input type="file" id="htmlInput" accept=".html" style="display:none" onchange="importHTML(event)">
+      <button onclick="document.getElementById('csvInput').click()">📥 导入 CSV</button>
+      <input type="file" id="csvInput" accept=".csv" style="display:none" onchange="importCSV(event)">
+      <button onclick="exportCSV()">导出 CSV</button>
+      <button class="danger" onclick="resetData()">恢复示例数据</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>📝 数据编辑</h2>
+    <div class="toolbar">
+      <button class="primary" onclick="refreshChart()">刷新图表</button>
+      <button onclick="addRow()">+ 添加一行</button>
+      <button onclick="addRowMulti()">+ 添加机型(三阶段)</button>
+    </div>
+    <table id="dataTable">
+      <thead><tr><th>#</th><th>资源(产品机型)</th><th>任务</th><th>开始日期</th><th>结束日期</th><th></th></tr></thead>
+      <tbody id="tableBody"><tr><td>1</td><td><input value="2500kW-V1-跟网" onchange="data[0].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试问题闭环" onchange="data[0].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-16" onchange="data[0].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[0].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(0)">✕</td></tr><tr><td>2</td><td><input value="2500kW-V1-跟网" onchange="data[1].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-归档完成" onchange="data[1].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-21" onchange="data[1].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[1].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(1)">✕</td></tr><tr><td>3</td><td><input value="2500kW-V1-跟网" onchange="data[2].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-发布/提单" onchange="data[2].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[2].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[2].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(2)">✕</td></tr><tr><td>4</td><td><input value="2500kW-V1-跟网" onchange="data[3].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-测试完成" onchange="data[3].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-1" onchange="data[3].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-1" onchange="data[3].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(3)">✕</td></tr><tr><td>5</td><td><input value="2500kW-V1-跟网" onchange="data[4].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-测试问题闭环" onchange="data[4].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-2" onchange="data[4].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-16" onchange="data[4].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(4)">✕</td></tr><tr><td>6</td><td><input value="2500kW-V1-跟网" onchange="data[5].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-归档完成" onchange="data[5].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-17" onchange="data[5].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[5].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(5)">✕</td></tr><tr><td>7</td><td><input value="2500kW-V1-跟网" onchange="data[6].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-发布/提单" onchange="data[6].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[6].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[6].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(6)">✕</td></tr><tr><td>8</td><td><input value="2500kW-V2-跟网" onchange="data[7].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="批量-测试问题闭环" onchange="data[7].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-15" onchange="data[7].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[7].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(7)">✕</td></tr><tr><td>9</td><td><input value="2500kW-V2-跟网" onchange="data[8].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="批量-归档完成" onchange="data[8].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[8].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[8].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(8)">✕</td></tr><tr><td>10</td><td><input value="2500kW-V2-跟网" onchange="data[9].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="批量-发布/提单" onchange="data[9].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[9].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[9].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(9)">✕</td></tr><tr><td>11</td><td><input value="2500kW-V2-跟网" onchange="data[10].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试完成" onchange="data[10].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[10].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[10].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(10)">✕</td></tr><tr><td>12</td><td><input value="2500kW-V2-跟网" onchange="data[11].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试问题闭环" onchange="data[11].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-1" onchange="data[11].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-15" onchange="data[11].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(11)">✕</td></tr><tr><td>13</td><td><input value="2500kW-V2-跟网" onchange="data[12].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-归档完成" onchange="data[12].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-16" onchange="data[12].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-30" onchange="data[12].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(12)">✕</td></tr><tr><td>14</td><td><input value="2500kW-V2-跟网" onchange="data[13].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-发布/提单" onchange="data[13].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-30" onchange="data[13].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-30" onchange="data[13].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(13)">✕</td></tr><tr><td>15</td><td><input value="2500kW-V2-跟网" onchange="data[14].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-测试完成" onchange="data[14].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-31" onchange="data[14].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-1" onchange="data[14].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(14)">✕</td></tr><tr><td>16</td><td><input value="2500kW-V2-跟网" onchange="data[15].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-测试问题闭环" onchange="data[15].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-1" onchange="data[15].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-16" onchange="data[15].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(15)">✕</td></tr><tr><td>17</td><td><input value="2500kW-V2-跟网" onchange="data[16].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-归档完成" onchange="data[16].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-17" onchange="data[16].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[16].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(16)">✕</td></tr><tr><td>18</td><td><input value="2500kW-V2-跟网" onchange="data[17].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-发布/提单" onchange="data[17].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[17].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[17].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(17)">✕</td></tr><tr><td>19</td><td><input value="1250KW-V2-构网" onchange="data[18].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试完成" onchange="data[18].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-15" onchange="data[18].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[18].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(18)">✕</td></tr><tr><td>20</td><td><input value="1250KW-V2-构网" onchange="data[19].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试问题闭环" onchange="data[19].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[19].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[19].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(19)">✕</td></tr><tr><td>21</td><td><input value="1250KW-V2-构网" onchange="data[20].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-归档完成" onchange="data[20].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[20].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-15" onchange="data[20].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(20)">✕</td></tr><tr><td>22</td><td><input value="3450kW-V1-跟网" onchange="data[21].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试完成" onchange="data[21].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-1" onchange="data[21].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-15" onchange="data[21].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(21)">✕</td></tr><tr><td>23</td><td><input value="3450kW-V1-跟网" onchange="data[22].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试问题闭环" onchange="data[22].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-16" onchange="data[22].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[22].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(22)">✕</td></tr><tr><td>24</td><td><input value="3450kW-V1-跟网" onchange="data[23].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-归档完成" onchange="data[23].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-21" onchange="data[23].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[23].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(23)">✕</td></tr><tr><td>25</td><td><input value="3450kW-V1-跟网" onchange="data[24].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-发布/提单" onchange="data[24].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[24].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[24].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(24)">✕</td></tr><tr><td>26</td><td><input value="3450kW-V1-跟网" onchange="data[25].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-测试完成" onchange="data[25].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-1" onchange="data[25].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-1" onchange="data[25].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(25)">✕</td></tr><tr><td>27</td><td><input value="3450kW-V1-跟网" onchange="data[26].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-测试问题闭环" onchange="data[26].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-2" onchange="data[26].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-16" onchange="data[26].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(26)">✕</td></tr><tr><td>28</td><td><input value="3450kW-V1-跟网" onchange="data[27].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-归档完成" onchange="data[27].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-17" onchange="data[27].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[27].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(27)">✕</td></tr><tr><td>29</td><td><input value="3450kW-V1-跟网" onchange="data[28].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-发布/提单" onchange="data[28].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[28].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[28].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(28)">✕</td></tr><tr><td>30</td><td><input value="3450kW-V2-跟网" onchange="data[29].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="批量-测试问题闭环" onchange="data[29].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-15" onchange="data[29].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[29].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(29)">✕</td></tr><tr><td>31</td><td><input value="3450kW-V2-跟网" onchange="data[30].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="批量-归档完成" onchange="data[30].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[30].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[30].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(30)">✕</td></tr><tr><td>32</td><td><input value="3450kW-V2-跟网" onchange="data[31].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="批量-发布/提单" onchange="data[31].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[31].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[31].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(31)">✕</td></tr><tr><td>33</td><td><input value="3450kW-V2-跟网" onchange="data[32].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试完成" onchange="data[32].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[32].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[32].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(32)">✕</td></tr><tr><td>34</td><td><input value="3450kW-V2-跟网" onchange="data[33].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试问题闭环" onchange="data[33].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-1" onchange="data[33].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-15" onchange="data[33].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(33)">✕</td></tr><tr><td>35</td><td><input value="3450kW-V2-跟网" onchange="data[34].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-归档完成" onchange="data[34].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-16" onchange="data[34].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-30" onchange="data[34].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(34)">✕</td></tr><tr><td>36</td><td><input value="3450kW-V2-跟网" onchange="data[35].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-发布/提单" onchange="data[35].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-30" onchange="data[35].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-30" onchange="data[35].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(35)">✕</td></tr><tr><td>37</td><td><input value="3450kW-V2-跟网" onchange="data[36].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-测试完成" onchange="data[36].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-31" onchange="data[36].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-1" onchange="data[36].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(36)">✕</td></tr><tr><td>38</td><td><input value="3450kW-V2-跟网" onchange="data[37].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-测试问题闭环" onchange="data[37].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-1" onchange="data[37].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-16" onchange="data[37].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(37)">✕</td></tr><tr><td>39</td><td><input value="3450kW-V2-跟网" onchange="data[38].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-归档完成" onchange="data[38].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-17" onchange="data[38].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[38].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(38)">✕</td></tr><tr><td>40</td><td><input value="3450kW-V2-跟网" onchange="data[39].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅱ-发布/提单" onchange="data[39].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[39].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-12-30" onchange="data[39].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(39)">✕</td></tr><tr><td>41</td><td><input value="1750KW-V1-构网" onchange="data[40].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-首台装配完成" onchange="data[40].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-1" onchange="data[40].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-15" onchange="data[40].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(40)">✕</td></tr><tr><td>42</td><td><input value="1750KW-V1-构网" onchange="data[41].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试完成" onchange="data[41].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-15" onchange="data[41].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[41].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(41)">✕</td></tr><tr><td>43</td><td><input value="1750KW-V1-构网" onchange="data[42].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-测试问题闭环" onchange="data[42].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-20" onchange="data[42].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[42].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(42)">✕</td></tr><tr><td>44</td><td><input value="1750KW-V1-构网" onchange="data[43].resource=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="Ⅰ-归档完成" onchange="data[43].task=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-9-30" onchange="data[43].start=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td><input value="2026-10-15" onchange="data[43].end=this.value;localStorage.setItem('gantt_data',JSON.stringify(data))"></td><td class="del-btn" onclick="delRow(43)">✕</td></tr></tbody>
+    </table>
+    <div class="hint">日期格式 yyyy-m-d，如 2026-9-1。图表下方有原生横向滚动条，拖动即可查看不同时间段。</div>
+  </div>
+</div>
+
+<script>
+window.onerror = function(msg) {
+  var e = document.getElementById('err'); e.style.display = 'block';
+  e.textContent = 'JS错误: ' + msg;
+};
+
+// ===== 数据 =====
+var defaultData = [{"resource":"2500kW-V1-跟网","task":"Ⅰ-测试问题闭环","start":"2026-9-16","end":"2026-9-20"},{"resource":"2500kW-V1-跟网","task":"Ⅰ-归档完成","start":"2026-9-21","end":"2026-9-30"},{"resource":"2500kW-V1-跟网","task":"Ⅰ-发布/提单","start":"2026-9-30","end":"2026-9-30"},{"resource":"2500kW-V1-跟网","task":"Ⅱ-测试完成","start":"2026-10-1","end":"2026-12-1"},{"resource":"2500kW-V1-跟网","task":"Ⅱ-测试问题闭环","start":"2026-12-2","end":"2026-12-16"},{"resource":"2500kW-V1-跟网","task":"Ⅱ-归档完成","start":"2026-12-17","end":"2026-12-30"},{"resource":"2500kW-V1-跟网","task":"Ⅱ-发布/提单","start":"2026-12-30","end":"2026-12-30"},{"resource":"2500kW-V2-跟网","task":"批量-测试问题闭环","start":"2026-9-15","end":"2026-9-20"},{"resource":"2500kW-V2-跟网","task":"批量-归档完成","start":"2026-9-20","end":"2026-9-30"},{"resource":"2500kW-V2-跟网","task":"批量-发布/提单","start":"2026-9-30","end":"2026-9-30"},{"resource":"2500kW-V2-跟网","task":"Ⅰ-测试完成","start":"2026-9-30","end":"2026-9-30"},{"resource":"2500kW-V2-跟网","task":"Ⅰ-测试问题闭环","start":"2026-10-1","end":"2026-10-15"},{"resource":"2500kW-V2-跟网","task":"Ⅰ-归档完成","start":"2026-10-16","end":"2026-10-30"},{"resource":"2500kW-V2-跟网","task":"Ⅰ-发布/提单","start":"2026-10-30","end":"2026-10-30"},{"resource":"2500kW-V2-跟网","task":"Ⅱ-测试完成","start":"2026-10-31","end":"2026-12-1"},{"resource":"2500kW-V2-跟网","task":"Ⅱ-测试问题闭环","start":"2026-12-1","end":"2026-12-16"},{"resource":"2500kW-V2-跟网","task":"Ⅱ-归档完成","start":"2026-12-17","end":"2026-12-30"},{"resource":"2500kW-V2-跟网","task":"Ⅱ-发布/提单","start":"2026-12-30","end":"2026-12-30"},{"resource":"1250KW-V2-构网","task":"Ⅰ-测试完成","start":"2026-9-15","end":"2026-9-20"},{"resource":"1250KW-V2-构网","task":"Ⅰ-测试问题闭环","start":"2026-9-20","end":"2026-9-30"},{"resource":"1250KW-V2-构网","task":"Ⅰ-归档完成","start":"2026-9-30","end":"2026-10-15"},{"resource":"3450kW-V1-跟网","task":"Ⅰ-测试完成","start":"2026-9-1","end":"2026-9-15"},{"resource":"3450kW-V1-跟网","task":"Ⅰ-测试问题闭环","start":"2026-9-16","end":"2026-9-20"},{"resource":"3450kW-V1-跟网","task":"Ⅰ-归档完成","start":"2026-9-21","end":"2026-9-30"},{"resource":"3450kW-V1-跟网","task":"Ⅰ-发布/提单","start":"2026-9-30","end":"2026-9-30"},{"resource":"3450kW-V1-跟网","task":"Ⅱ-测试完成","start":"2026-10-1","end":"2026-12-1"},{"resource":"3450kW-V1-跟网","task":"Ⅱ-测试问题闭环","start":"2026-12-2","end":"2026-12-16"},{"resource":"3450kW-V1-跟网","task":"Ⅱ-归档完成","start":"2026-12-17","end":"2026-12-30"},{"resource":"3450kW-V1-跟网","task":"Ⅱ-发布/提单","start":"2026-12-30","end":"2026-12-30"},{"resource":"3450kW-V2-跟网","task":"批量-测试问题闭环","start":"2026-9-15","end":"2026-9-20"},{"resource":"3450kW-V2-跟网","task":"批量-归档完成","start":"2026-9-20","end":"2026-9-30"},{"resource":"3450kW-V2-跟网","task":"批量-发布/提单","start":"2026-9-30","end":"2026-9-30"},{"resource":"3450kW-V2-跟网","task":"Ⅰ-测试完成","start":"2026-9-30","end":"2026-9-30"},{"resource":"3450kW-V2-跟网","task":"Ⅰ-测试问题闭环","start":"2026-10-1","end":"2026-10-15"},{"resource":"3450kW-V2-跟网","task":"Ⅰ-归档完成","start":"2026-10-16","end":"2026-10-30"},{"resource":"3450kW-V2-跟网","task":"Ⅰ-发布/提单","start":"2026-10-30","end":"2026-10-30"},{"resource":"3450kW-V2-跟网","task":"Ⅱ-测试完成","start":"2026-10-31","end":"2026-12-1"},{"resource":"3450kW-V2-跟网","task":"Ⅱ-测试问题闭环","start":"2026-12-1","end":"2026-12-16"},{"resource":"3450kW-V2-跟网","task":"Ⅱ-归档完成","start":"2026-12-17","end":"2026-12-30"},{"resource":"3450kW-V2-跟网","task":"Ⅱ-发布/提单","start":"2026-12-30","end":"2026-12-30"},{"resource":"1750KW-V1-构网","task":"Ⅰ-首台装配完成","start":"2026-9-1","end":"2026-9-15"},{"resource":"1750KW-V1-构网","task":"Ⅰ-测试完成","start":"2026-9-15","end":"2026-9-20"},{"resource":"1750KW-V1-构网","task":"Ⅰ-测试问题闭环","start":"2026-9-20","end":"2026-9-30"},{"resource":"1750KW-V1-构网","task":"Ⅰ-归档完成","start":"2026-9-30","end":"2026-10-15"}];
+
+// ===== 莫兰迪配色方案(提亮版) =====
+var morandiColors = {
+  // 批量/准备类 - 墨蓝色系(提亮)
+  '批量-测试完成': '#5E8B9F',
+  '批量-测试问题闭环': '#7FA6BA',
+  '批量-归档完成': '#9FC2D3',
+  '批量-发布/提单': '#BFDDED',
+  // Ⅰ阶段 - 米黄色系(提亮)
+  'Ⅰ-首台装配完成': '#E5BE5E',
+  'Ⅰ-测试完成': '#F0CF76',
+  'Ⅰ-测试问题闭环': '#F7DE8E',
+  'Ⅰ-归档完成': '#FBEAAC',
+  'Ⅰ-发布/提单': '#FDF3C8',
+  // Ⅱ阶段 - 珊瑚红色系(提亮)
+  'Ⅱ-测试完成': '#C66B5F',
+  'Ⅱ-测试问题闭环': '#DD867A',
+  'Ⅱ-归档完成': '#EEA498',
+  'Ⅱ-发布/提单': '#F7C5BB',
+  // Ⅲ/三阶段 - 浅蓝紫系(提亮)
+  'Ⅲ-测试完成': '#7C9EE0',
+  'Ⅲ-测试问题闭环': '#9AB7F5',
+  'Ⅲ-归档完成': '#B6CDF8',
+  'Ⅲ-发布/提单': '#D3DEFB'
+};
+
+var fallbackPalettes = {
+  '批量': ['#5E8B9F','#7FA6BA','#9FC2D3','#BFDDED','#DEEEF4','#EFF7FA'],
+  'Ⅰ':   ['#E5BE5E','#F0CF76','#F7DE8E','#FBEAAC','#FDF3C8','#FEF9E4'],
+  '一':   ['#E5BE5E','#F0CF76','#F7DE8E','#FBEAAC','#FDF3C8','#FEF9E4'],
+  'Ⅱ':   ['#C66B5F','#DD867A','#EEA498','#F7C5BB','#FAD5CD','#FDE6E2'],
+  '二':   ['#C66B5F','#DD867A','#EEA498','#F7C5BB','#FAD5CD','#FDE6E2'],
+  'Ⅲ':   ['#7C9EE0','#9AB7F5','#B6CDF8','#D3DEFB','#EAEFFD','#F3F6FE'],
+  '三':   ['#7C9EE0','#9AB7F5','#B6CDF8','#D3DEFB','#EAEFFD','#F3F6FE']
+};
+var fallbackColorCount = {}; // 记录每个大类已分配了几个颜色
+
+function getColor(task) {
+  // 1. 精确匹配
+  if (morandiColors[task]) return morandiColors[task];
+  // 2. 按大类关键字匹配
+  for (var key in fallbackPalettes) {
+    if (task.indexOf(key) !== -1) {
+      if (!fallbackColorCount[key]) fallbackColorCount[key] = 0;
+      var idx = fallbackColorCount[key] % fallbackPalettes[key].length;
+      fallbackColorCount[key]++;
+      return fallbackPalettes[key][idx];
+    }
+  }
+  // 3. 兜底
+  var last = data[data.length - 1];
+  return '#909399';
+}
+
+// 每次刷新图表前重置 fallback 计数器
+function resetColorCounters() { fallbackColorCount = {}; }
+var data = null;
+var chart;
+
+// 版本号变更时自动清除旧的 localStorage 数据（避免格式不匹配）
+var DATA_VERSION = 'v3_fix';
+try {
+  if (localStorage.getItem('gantt_data_version') !== DATA_VERSION) {
+    localStorage.removeItem('gantt_data');
+    localStorage.setItem('gantt_data_version', DATA_VERSION);
+  }
+  var s = localStorage.getItem('gantt_data');
+  data = s ? JSON.parse(s) : JSON.parse(JSON.stringify(defaultData));
+  // 数据有效性检查:如果 start/end 为空,说明数据格式不对,恢复 defaultData
+  if (data.length === 0 || !data[0].start || !data[0].end || isNaN(parseDate(data[0].start))) {
+    data = JSON.parse(JSON.stringify(defaultData));
+    localStorage.setItem('gantt_data', JSON.stringify(data));
+  }
+} catch(e) { data = JSON.parse(JSON.stringify(defaultData)); }
+
+function parseDate(s) {
+  if (!s || typeof s !== 'string') return new Date(NaN);
+  s = s.trim();
+  if (!s) return new Date(NaN);
+  // 尝试标准格式
+  var d = new Date(s);
+  if (!isNaN(d)) return d;
+  // 把 - 换成 / 再试
+  d = new Date(s.replace(/-/g, '/'));
+  if (!isNaN(d)) return d;
+  // 把 . 换成 / 再试 (Excel 格式)
+  d = new Date(s.replace(/\./g, '/'));
+  if (!isNaN(d)) return d;
+  // 提取 YYYY MM DD
+  var m = s.match(/(\d{4})[^\d]+(\d{1,2})[^\d]+(\d{1,2})/);
+  if (m) {
+    d = new Date(parseInt(m[1]), parseInt(m[2])-1, parseInt(m[3]));
+    if (!isNaN(d)) return d;
+  }
+  return new Date(NaN);
+}
+
+function getStages() {
+  var stages = [];
+  for (var i = 0; i < data.length; i++)
+    if (stages.indexOf(data[i].task) === -1) stages.push(data[i].task);
+  return stages;
+}
+
+function renderTable() {
+  var tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  for (var i = 0; i < data.length; i++) {
+    var r = data[i];
+    tbody.innerHTML += '<tr><td>' + (i+1) + '</td>' +
+      '<td><input value="' + r.resource + '" onchange="data['+i+'].resource=this.value;localStorage.setItem(\'gantt_data\',JSON.stringify(data))"></td>' +
+      '<td><input value="' + r.task + '" onchange="data['+i+'].task=this.value;localStorage.setItem(\'gantt_data\',JSON.stringify(data))"></td>' +
+      '<td><input value="' + r.start + '" onchange="data['+i+'].start=this.value;localStorage.setItem(\'gantt_data\',JSON.stringify(data))"></td>' +
+      '<td><input value="' + r.end + '" onchange="data['+i+'].end=this.value;localStorage.setItem(\'gantt_data\',JSON.stringify(data))"></td>' +
+      '<td class="del-btn" onclick="delRow('+i+')">✕</td></tr>';
+  }
+}
+
+function addRow() {
+  var last = data[data.length-1] || { resource: "新机型", task: "批量", start: "2026-9-1", end: "2026-9-10" };
+  data.push({ resource: last.resource, task: last.task, start: last.start, end: last.end });
+  localStorage.setItem('gantt_data', JSON.stringify(data));
+  renderTable(); refreshChart();
+}
+
+function addRowMulti() {
+  var res = prompt('输入机型名称:', '新机型');
+  if (!res) return;
+  var start = prompt('开始日期 (yyyy-m-d):', '2026-9-1');
+  if (!start) return;
+  var d1 = parseDate(start);
+  function addDays(d, n) { return new Date(d.getTime() + n * 86400000).toISOString().slice(0,10); }
+  data.push({ resource: res, task: "批量",   start: start,          end: addDays(d1, 8)  });
+  data.push({ resource: res, task: "一阶段", start: addDays(d1, 9),  end: addDays(d1, 23) });
+  data.push({ resource: res, task: "二阶段", start: addDays(d1, 24), end: addDays(d1, 38) });
+  localStorage.setItem('gantt_data', JSON.stringify(data));
+  renderTable(); refreshChart();
+}
+
+function delRow(i) { data.splice(i, 1); localStorage.setItem('gantt_data', JSON.stringify(data)); renderTable(); refreshChart(); }
+function resetData() {
+  if (!confirm('确定恢复为示例数据吗？')) return;
+  data = JSON.parse(JSON.stringify(defaultData)); localStorage.setItem('gantt_data', JSON.stringify(data));
+  renderTable(); refreshChart();
+}
+
+function exportCSV() {
+  var csv = '\ufeff资源,任务,开始,结束\n';
+  for (var i = 0; i < data.length; i++) {
+    var r = data[i]; csv += r.resource + ',' + r.task + ',' + r.start + ',' + r.end + '\n';
+  }
+  var blob = new Blob([csv], {type:'text/csv'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'gantt_data.csv'; a.click();
+}
+
+function importCSV(e) {
+  var f = e.target.files[0]; if (!f) return;
+  var r = new FileReader();
+  r.onload = function() {
+    var lines = r.result.trim().split(/\r?\n/);
+    // 第一行是表头,自动识别中文/英文列名
+    var header = lines[0].split(',').map(function(s){ return s.trim(); });
+    var idx = { resource: -1, task: -1, start: -1, end: -1 };
+    for (var i = 0; i < header.length; i++) {
+      var h = header[i];
+      if (/资源|产品机型|机型|resource|Resource/i.test(h)) idx.resource = i;
+      else if (/任务|阶段|task|Task/i.test(h)) idx.task = i;
+      else if (/开始|start|Start/i.test(h)) idx.start = i;
+      else if (/结束|end|End/i.test(h)) idx.end = i;
+    }
+    var newData = [];
+    for (var i = 1; i < lines.length; i++) {
+      var parts = lines[i].split(',');
+      if (parts.length >= 4) {
+        var res = parts[idx.resource] ? parts[idx.resource].trim() : '';
+        var task = parts[idx.task] ? parts[idx.task].trim() : '';
+        var start = parts[idx.start] ? parts[idx.start].trim() : '';
+        var end = parts[idx.end] ? parts[idx.end].trim() : '';
+        // 跳过资源名为空 或 日期为空 的行
+        if (!res || !start || !end) continue;
+        // 把 / 日期统一换成 -
+        start = start.replace(/\//g, '-');
+        end = end.replace(/\//g, '-');
+        newData.push({ resource: res, task: task, start: start, end: end });
+      }
+    }
+    if (newData.length > 0) {
+      data = newData; localStorage.setItem('gantt_data', JSON.stringify(data));
+    }
+    renderTable(); refreshChart();
+  };
+  r.readAsText(f, 'UTF-8'); e.target.value = '';
+}
+
+function exportHTML() {
+  var html = document.documentElement.outerHTML;
+  html = html.replace(/var defaultData = \[[\s\S]*?\];/, 'var defaultData = ' + JSON.stringify(data) + ';');
+  var blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'gantt_' + new Date().toISOString().slice(0,10) + '.html'; a.click();
+}
+
+function importHTML(e) {
+  var f = e.target.files[0]; if (!f) return;
+  var r = new FileReader();
+  r.onload = function() {
+    try {
+      var match = r.result.match(/var defaultData = (\[[\s\S]*?\]);/);
+      if (match) { data = JSON.parse(match[1]); localStorage.setItem('gantt_data', JSON.stringify(data));
+        renderTable(); refreshChart(); alert('导入成功！'); }
+    } catch(err) { alert('导入失败: ' + err.message); }
+  };
+  r.readAsText(f, 'UTF-8'); e.target.value = '';
+}
+
+// ===== 图表 =====
+function refreshChart() {
+  // 每次刷新前重置颜色分配计数器
+  resetColorCounters();
+
+  if (typeof echarts === 'undefined') {
+    document.getElementById('err').style.display = 'block';
+    document.getElementById('err').textContent = 'ECharts 未加载！';
+    return;
+  }
+  document.getElementById('err').style.display = 'none';
+
+  var stages = getStages();
+
+  var resources = [];
+  for (var i = 0; i < data.length; i++)
+    if (resources.indexOf(data[i].resource) === -1) resources.push(data[i].resource);
+  resources.reverse();
+
+  var globalStart = parseDate(data[0].start);
+  var globalEnd = parseDate(data[0].end);
+  for (var i = 1; i < data.length; i++) {
+    var s = parseDate(data[i].start), e = parseDate(data[i].end);
+    if (s < globalStart) globalStart = s;
+    if (e > globalEnd) globalEnd = e;
+  }
+
+  var maxDays = Math.round((globalEnd - globalStart) / 86400000) + 1;
+
+  // 固定每天 16px,图表总宽度必须明显超过容器(约1160px)才有滚动条
+  var pxPerDay = 16;
+  var chartWidth = Math.max(1400, maxDays * pxPerDay + 180);
+
+  // 每月1号天偏移
+  var monthDayOffsets = [];
+  var cur = new Date(globalStart); cur.setDate(1);
+  while (cur <= globalEnd) {
+    monthDayOffsets.push(Math.round((cur - globalStart) / 86400000));
+    cur.setMonth(cur.getMonth() + 1);
+  }
+  var markLineData = [];
+  for (var mi = 0; mi < monthDayOffsets.length; mi++) {
+    markLineData.push({ xAxis: monthDayOffsets[mi] });
+  }
+
+  var series = [];
+
+  // offset 透明 bar
+  var offsetData = [];
+  for (var i = 0; i < resources.length; i++) {
+    var res = resources[i];
+    for (var j = 0; j < data.length; j++) {
+      if (data[j].resource === res) {
+        offsetData.push(Math.round((parseDate(data[j].start) - globalStart) / 86400000));
+        break;
+      }
+    }
+  }
+  series.push({
+    name: '_offset', type: 'bar', stack: 'total', data: offsetData,
+    itemStyle: { color: 'transparent', borderColor: 'transparent' },
+    label: { show: false }, barWidth: 28, silent: true
+  });
+
+  // 各阶段 bar
+  for (var s = 0; s < stages.length; s++) {
+    var stage = stages[s];
+    var stageData = [];
+    for (var i = 0; i < resources.length; i++) {
+      var res = resources[i], found = null;
+      for (var j = 0; j < data.length; j++) {
+        if (data[j].resource === res && data[j].task === stage) { found = data[j]; break; }
+      }
+      if (found) {
+        var durDays = Math.round((parseDate(found.end) - parseDate(found.start)) / 86400000) + 1;
+        stageData.push(durDays);
+      } else {
+        stageData.push(0);
+      }
+    }
+    var seriesCfg = {
+      name: stage, type: 'bar', stack: 'total', data: stageData,
+      itemStyle: { color: getColor(stage) },
+      label: {
+        show: true, position: 'inside',
+        formatter: function(params) { return params.value > 1 ? params.seriesName : ''; },
+        color: '#fff', fontSize: 11, fontWeight: 'bold'
+      },
+      barWidth: 28
+    };
+    if (s === 0) {
+      seriesCfg.markLine = {
+        silent: true, symbol: 'none',
+        lineStyle: { color: '#e8e8e8', type: 'solid', width: 1 },
+        data: markLineData
+      };
+    }
+    series.push(seriesCfg);
+  }
+
+  // 设置图表宽度
+  document.getElementById('chart').style.width = chartWidth + 'px';
+
+  if (!chart) chart = echarts.init(document.getElementById('chart'));
+  chart.clear(); // 彻底清除旧配置
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis', axisPointer: { type: 'shadow' },
+      formatter: function(params) {
+        var res = params[0].name, html = '<b>' + res + '</b><br/>';
+        for (var i = 0; i < params.length; i++) {
+          var p = params[i];
+          if (p.seriesName !== '_offset' && p.value > 0) {
+            for (var j = 0; j < data.length; j++) {
+              if (data[j].resource === res && data[j].task === p.seriesName) {
+                html += p.marker + ' ' + p.seriesName + ': ' + data[j].start + ' ~ ' + data[j].end + ' (' + p.value + '天)<br/>';
+                break;
+              }
+            }
+          }
+        }
+        return html;
+      }
+    },
+    legend: { show: false },
+    grid: { left: 140, right: 30, top: 30, bottom: 50, containLabel: false },
+    xAxis: {
+      type: 'value',
+      min: 0,
+      max: maxDays,
+      splitNumber: Math.max(6, Math.ceil(maxDays / 30)),
+      axisLine: { show: true, lineStyle: { color: '#999', width: 1.5 } },
+      axisLabel: {
+        show: true,
+        color: '#333',
+        margin: 12,
+        fontSize: 13,
+        // 按月份去重:同一个月只显示一次,不管刻度具体在哪天
+        formatter: (function() {
+          var lastMonth = -1;
+          return function(val) {
+            var d = new Date(globalStart.getTime() + val * 86400000);
+            var m = d.getMonth();
+            if (m !== lastMonth) {
+              lastMonth = m;
+              return d.getFullYear() + '年' + (m+1) + '月';
+            }
+            return '';
+          };
+        })()
+      },
+      axisTick: { show: true, lineStyle: { color: '#999', width: 1 }, length: 4 },
+      splitLine: { show: false }
+    },
+    yAxis: {
+      type: 'category',
+      data: resources,
+      axisLabel: { fontSize: 13, color: '#333' },
+      axisLine: { show: false },
+      axisTick: { show: false },
+      splitLine: { show: false }
+    },
+    series: series
+  });
+
+  renderLegend(stages);
+  chart.resize();
+}
+
+// 外部固定图例(不跟随滚动)
+function renderLegend(stages) {
+  var box = document.getElementById('legendBox');
+  box.innerHTML = '';
+  for (var i = 0; i < stages.length; i++) {
+    var s = stages[i];
+    var color = getColor(s);
+    box.innerHTML += '<span style="display:inline-flex;align-items:center;gap:6px">' +
+      '<span style="width:14px;height:14px;background:' + color + ';border-radius:2px;display:inline-block"></span>' +
+      '<span>' + s + '</span></span>';
+  }
+}
+
+window.addEventListener('resize', function() { if (chart) chart.resize(); });
+
+renderTable();
+refreshChart();
+</script>
+
+
+</body></html>

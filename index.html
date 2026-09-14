@@ -542,33 +542,28 @@ function refreshChart() {
 }
 
 // 渲染固定左侧Y轴标签(HTML层,滚动时不动)
-// 用 chart.convertToPixel({yAxisIndex:0}, i) 拿到精确的 row 中心 y (canvas内坐标)
+// 不依赖 getBoundingClientRect,用固定参数计算(兼容钉钉内嵌浏览器)
 function renderYLabels(resources) {
   var box = document.getElementById('yLabels');
   box.innerHTML = '';
   
-  var chartBox = document.querySelector('.chart-box');
-  var chartEl = document.getElementById('chart');
-  var chartRect = chartEl.getBoundingClientRect();
-  var boxRect = chartBox.getBoundingClientRect();
+  // 固定参数(和 CSS/grid 配置一致)
+  // chart-box padding=20, chartWrap margin-left=120
+  // grid.top=30, grid.bottom=25, chart height=440
+  var GRID_TOP = 30;
+  var GRID_BOTTOM = 25;
+  var CHART_H = 440;
+  var gridH = CHART_H - GRID_TOP - GRID_BOTTOM;
+  var N = resources.length;
+  var rowHeight = gridH / N;
   
-  // canvas 相对于 chart-box 的偏移
-  var canvasOffsetTop = chartRect.top - boxRect.top;
-  var canvasOffsetLeft = chartRect.left - boxRect.left;
-  
-  // grid 绘图区左边在 canvas 内的 x (grid.left=0, 所以就是0)
-  // 但 grid 右边是 chartWidth - 30 (grid.right=30)
-  // 我们让 yLabels 从 chart-box 左到 grid 左
-  
-  box.style.top = canvasOffsetTop + 'px';
-  box.style.left = '0px';
-  box.style.width = canvasOffsetLeft + 'px'; // 宽度就是 canvas 左边相对 chart-box 的位置
-  box.style.height = chartEl.offsetHeight + 'px';
+  // 恢复 CSS 定位(不被 JS 覆盖)
+  box.style.top = '20px';      // chart-box padding
+  box.style.left = '20px';    // chart-box padding
+  box.style.width = '110px';  // 固定宽度
+  box.style.height = CHART_H + 'px';
   box.style.display = 'block';
   
-  var N = resources.length;
-  
-  // 用 ECharts convertToPixel 把每个 Y category index 转成 canvas 内的精确 y
   for (var i = 0; i < N; i++) {
     var row = document.createElement('div');
     row.className = 'y-label-row';
@@ -576,25 +571,12 @@ function renderYLabels(resources) {
     row.style.position = 'absolute';
     row.style.left = '0';
     row.style.right = '0';
+    row.style.height = rowHeight + 'px';
+    row.style.top = (GRID_TOP + i * rowHeight) + 'px';
     row.style.display = 'flex';
     row.style.alignItems = 'center';
     row.style.justifyContent = 'flex-end';
-    row.style.paddingRight = '6px';
-    
-    // 用 convertToPixel 拿 category 中心的 y 坐标
-    // convertToPixel({yAxisIndex: 0}, value) 对 category 轴传 index
-    var centerY;
-    try {
-      centerY = chart.convertToPixel({yAxisIndex: 0}, i);
-    } catch(e) {
-      // fallback: 手动算
-      var gridTop = 30;
-      var gridBottom = 25;
-      var chartH = chartEl.offsetHeight;
-      var gridH = chartH - gridTop - gridBottom;
-      centerY = gridTop + (i + 0.5) * (gridH / N);
-    }
-    row.style.top = (centerY - 10) + 'px'; // -10 让 ~20px 高的文字居中
+    row.style.paddingRight = '10px';
     box.appendChild(row);
   }
 }
